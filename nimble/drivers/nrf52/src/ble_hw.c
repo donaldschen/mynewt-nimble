@@ -66,6 +66,12 @@ uint8_t g_nrf_num_irks;
 int
 ble_hw_get_public_addr(ble_addr_t *addr)
 {
+    #if 1
+        uint8_t* p_uicr_addr = (uint8_t*)0x10001080;
+        memcpy(addr->val, p_uicr_addr, 6);
+        addr->type = BLE_ADDR_PUBLIC;
+        return 0;
+    #else
     uint32_t addr_high;
     uint32_t addr_low;
 
@@ -82,6 +88,7 @@ ble_hw_get_public_addr(ble_addr_t *addr)
     addr->type = BLE_ADDR_PUBLIC;
 
     return 0;
+    #endif
 }
 
 /* Returns random static address or -1 if not present */

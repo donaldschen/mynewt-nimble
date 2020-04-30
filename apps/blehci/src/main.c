@@ -19,12 +19,24 @@
 
 #include <assert.h>
 #include "os/mynewt.h"
+#include "hal/hal_gpio.h"
+#include "controller/ble_phy.h"
+
+static void
+bmd345_init(void)
+{
+	/* Set PA/LNA pins as output */
+	hal_gpio_init_out(4,0);
+    hal_gpio_init_out(2,1);
+}
 
 int
 main(void)
 {
     /* Initialize OS */
     sysinit();
+
+    bmd345_init();
 
     while (1) {
         os_eventq_run(os_eventq_dflt_get());
