@@ -26,8 +26,11 @@ static void
 bmd345_init(void)
 {
 	/* Set PA/LNA pins as output */
-	hal_gpio_init_out(4,0);
-    hal_gpio_init_out(2,1);
+    //p1.04: high = bypass, low = palna/enable
+	hal_gpio_init_out(36,0);
+
+    //p1.02: high = internal ant, low = external ant
+    hal_gpio_init_out(34,1);
 }
 
 int
