@@ -873,7 +873,7 @@ ble_phy_tx_end_isr(void)
     wfr_time = NRF_RADIO->SHORTS;
     (void)wfr_time;
 
-    ble_phy_palna_tx_complete();
+    ble_phy_palna_idle();
 
 #if MYNEWT_VAL(BLE_LL_CFG_FEAT_LE_ENCRYPTION)
     /*
@@ -975,7 +975,7 @@ ble_phy_rx_end_isr(void)
     /* Disable automatic RXEN */
     NRF_PPI->CHENCLR = PPI_CHEN_CH21_Msk;
 
-    ble_phy_palna_rx_complete();
+    ble_phy_palna_idle();
 
     /* Set RSSI and CRC status flag in header */
     ble_hdr = &g_ble_phy_data.rxhdr;
@@ -1990,8 +1990,7 @@ ble_phy_disable(void)
     ble_phy_stop_usec_timer();
     ble_phy_disable_irq_and_ppi();
 
-    ble_phy_palna_rx_complete();
-    ble_phy_palna_tx_complete();
+    ble_phy_palna_idle();
 }
 
 /* Gets the current access address */

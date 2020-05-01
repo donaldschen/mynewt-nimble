@@ -19,27 +19,12 @@
 
 #include <assert.h>
 #include "os/mynewt.h"
-#include "hal/hal_gpio.h"
-#include "controller/ble_phy.h"
-
-static void
-bmd345_init(void)
-{
-	/* Set PA/LNA pins as output */
-    //p1.04: high = bypass, low = palna/enable
-	hal_gpio_init_out(36,0);
-
-    //p1.02: high = internal ant, low = external ant
-    hal_gpio_init_out(34,1);
-}
 
 int
 main(void)
 {
     /* Initialize OS */
     sysinit();
-
-    bmd345_init();
 
     while (1) {
         os_eventq_run(os_eventq_dflt_get());
