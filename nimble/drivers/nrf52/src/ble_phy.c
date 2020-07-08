@@ -763,7 +763,7 @@ ble_phy_palna_idle(void)
 {
     /* disable PPI channels */
     NRF_PPI->CHENCLR = PALNA_PPI_CHANNEL_MASK;
-    nrf_gpiote_te_default(NRF_GPIOTE, PALNA_GPIOTE_CHANNEL);
+    nrf_gpiote_te_default(PALNA_GPIOTE_CHANNEL);
 
     /* disable pa/lna directly, clearing from gpiote is ambiguous here */
     #if MYNEWT_VAL(BLE_PHY_PALNA_PA_ENABLE_PIN)
@@ -792,14 +792,13 @@ ble_phy_palna_tx_setup(void)
     }          
     
     nrf_gpiote_task_configure(
-            NRF_GPIOTE,
             PALNA_GPIOTE_CHANNEL,
             MYNEWT_VAL(BLE_PHY_PALNA_PA_ENABLE_PIN),
             NRF_GPIOTE_POLARITY_TOGGLE,
             initial_val);
 
     /* enable task, PPI channels */
-    nrf_gpiote_task_enable(NRF_GPIOTE, PALNA_GPIOTE_CHANNEL);
+    nrf_gpiote_task_enable(PALNA_GPIOTE_CHANNEL);
     NRF_PPI->CHENSET = PALNA_PPI_CHANNEL_MASK;                      
 }
 #endif
@@ -820,14 +819,13 @@ ble_phy_palna_rx_setup(void)
     }
     
     nrf_gpiote_task_configure(
-        NRF_GPIOTE,
         PALNA_GPIOTE_CHANNEL,
         MYNEWT_VAL(BLE_PHY_PALNA_LNA_ENABLE_PIN),
         NRF_GPIOTE_POLARITY_TOGGLE,
         initial_val);
 
     /* enable task, PPI channels */
-    nrf_gpiote_task_enable(NRF_GPIOTE, PALNA_GPIOTE_CHANNEL);
+    nrf_gpiote_task_enable(PALNA_GPIOTE_CHANNEL);
     NRF_PPI->CHENSET = PALNA_PPI_CHANNEL_MASK;                      
 }
 #endif
