@@ -531,6 +531,7 @@ ble_ll_scan_halt(void)
     }
 }
 
+#if 0
 /**
  * Checks to see if we have received a scan response from this advertiser.
  *
@@ -581,6 +582,7 @@ next:
 
     return 0;
 }
+#endif
 
 #if MYNEWT_VAL(BLE_LL_CFG_FEAT_LL_EXT_ADV)
 static void
@@ -830,6 +832,7 @@ ble_ll_scan_send_adv_report(uint8_t pdu_type,
         evtype = BLE_HCI_ADV_RPT_EVTYPE_DIR_IND;
         adv_data_len = 0;
     } else {
+        adv_data_len = om->om_data[1] - BLE_DEV_ADDR_LEN;
         if (pdu_type == BLE_ADV_PDU_TYPE_ADV_IND) {
             evtype = BLE_HCI_ADV_RPT_EVTYPE_ADV_IND;
         } else if (pdu_type == BLE_ADV_PDU_TYPE_ADV_SCAN_IND) {
@@ -838,8 +841,11 @@ ble_ll_scan_send_adv_report(uint8_t pdu_type,
             evtype = BLE_HCI_ADV_RPT_EVTYPE_NONCONN_IND;
         } else {
             evtype = BLE_HCI_ADV_RPT_EVTYPE_SCAN_RSP;
+            if (adv_data_len == 0) {
+            // empty, ignore
+                return;
+            }
         }
-        adv_data_len = om->om_data[1] - BLE_DEV_ADDR_LEN;
         os_mbuf_adj(om, BLE_LL_PDU_HDR_LEN + BLE_DEV_ADDR_LEN);
     }
 
@@ -2294,8 +2300,8 @@ ble_ll_scan_send_scan_req(uint8_t pdu_type, uint8_t *rxbuf,
     struct ble_ll_aux_data *aux_data = rxinfo->user_data;
     uint8_t phy_mode;
 #endif
-    bool is_ext_adv = false;
-    uint16_t adi = 0;
+    // bool is_ext_adv = false;
+    // uint16_t adi = 0;
     int rc;
 
 #if MYNEWT_VAL(BLE_LL_CFG_FEAT_LL_EXT_ADV)
@@ -2308,10 +2314,10 @@ ble_ll_scan_send_scan_req(uint8_t pdu_type, uint8_t *rxbuf,
 #endif
 
     /* Check if we already scanned this device successfully */
-    if (ble_ll_scan_have_rxd_scan_rsp(addrd->adv_addr, addrd->adv_addr_type,
-                                      is_ext_adv, adi)) {
-        return false;
-    }
+    // if (ble_ll_scan_have_rxd_scan_rsp(addrd->adv_addr, addrd->adv_addr_type,
+    //                                   is_ext_adv, adi)) {
+    //     return false;
+    // }
 
     /* Better not be a scan response pending */
     BLE_LL_ASSERT(scansm->scan_rsp_pending == 0);
